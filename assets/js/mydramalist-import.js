@@ -53,6 +53,20 @@ async function fetchMyDramaListHtml(url) {
     return response.text();
 }
 
+// Many dramas are listed twice (regular + uncut cut), but most people only
+// watch one, and "(Uncut Ver.)" just makes the tile caption too wide to be
+// useful. Strip it rather than try to tell the two versions apart.
+function stripUncutSuffix(title) {
+    const cleaned = title
+        .replace(/\(\s*uncut(?:\s+ver(?:sion|\.)?)?\s*\)/gi, '')
+        .replace(/[:\-–]\s*uncut(?:\s+ver(?:sion|\.)?)?\s*$/i, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim()
+        .replace(/[:\-–]\s*$/, '')
+        .trim();
+    return cleaned || title;
+}
+
 function parseMyDramaListEntries(html) {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const rows = doc.querySelectorAll('table.msv2-table tbody tr');
@@ -65,7 +79,7 @@ function parseMyDramaListEntries(html) {
             return;
         }
 
-        const title = titleAnchor.getAttribute('title') || titleAnchor.textContent.trim();
+        const title = stripUncutSuffix(titleAnchor.getAttribute('title') || titleAnchor.textContent.trim());
         const poster = img.getAttribute('data-src') || img.getAttribute('src');
         const scoreEl = row.querySelector('.msv2-i-score .score');
         const scoreText = scoreEl ? scoreEl.textContent.trim() : '';
