@@ -12,6 +12,20 @@
     display: block;
 }
 
+/* A long unwrapped caption would otherwise widen the whole tile to fit it
+   (shrink-to-fit sizing considers the caption's unwrapped width); fixing the
+   tile's width breaks that so the caption wraps and the tile just grows
+   taller instead. Only applies to items with a caption (MDL imports) so
+   plain drag-and-dropped images keep their natural aspect ratio. */
+.tlm-item:has(.tlm-caption) {
+    width: 128px;
+}
+
+.tlm-item:has(.tlm-caption) img {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
 .tlm-caption {
     max-width: 100%;
     padding: 2px 4px;
