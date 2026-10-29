@@ -13,7 +13,7 @@ function export2image(evt) {
         taintTest: false,
         allowTaint: true,
         scale: 1.0,
-        backgroundColor: 'transparent',
+        backgroundColor: '#333',
     }).then((canvas) => {
         let context = canvas.getContext('2d');
         let imageData = context.getImageData(posX, posY, width, height).data;
