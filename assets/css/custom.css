@@ -16,12 +16,15 @@
    (shrink-to-fit sizing considers the caption's unwrapped width); fixing the
    tile's width breaks that so the caption wraps and the tile just grows
    taller instead. Only applies to items with a caption (MDL imports) so
-   plain drag-and-dropped images keep their natural aspect ratio. */
-.tlm-item:has(.tlm-caption) {
+   plain drag-and-dropped images keep their natural aspect ratio.
+   Deliberately a plain class (set in utils.js) rather than :has() -- the
+   bundled html2canvas (v1.1.0, predates :has()) mangles the PNG export
+   when the stylesheet contains it. */
+.tlm-item.tlm-captioned {
     width: 128px;
 }
 
-.tlm-item:has(.tlm-caption) img {
+.tlm-item.tlm-captioned img {
     max-width: 100%;
     margin: 0 auto;
 }

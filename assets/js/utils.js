@@ -54,6 +54,7 @@ function loadImageAndAddToDOM(file, stretch, cb, caption, score) {
         }
 
         if (caption) {
+            wrapper.classList.add('tlm-captioned');
             let label = document.createElement('div');
             label.classList.add('tlm-caption');
             label.textContent = caption;
