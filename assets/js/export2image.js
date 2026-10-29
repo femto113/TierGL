@@ -6,6 +6,11 @@ function export2image(evt) {
     const width = elementWidth(element) - elementWidth(document.getElementById('settings'));
     const height = elementHeight(element);
 
+    // Open the tab synchronously, in the same tick as the click, so the
+    // browser's popup blocker treats it as user-initiated -- opening it
+    // later from inside the .then() below gets blocked in most browsers.
+    const previewWindow = window.open('', '_blank');
+
     html2canvas(element, {
         width: width,
         height: height,
@@ -26,14 +31,8 @@ function export2image(evt) {
         idata.data.set(imageData);
         outputContext.putImageData(idata, 0, 0);
 
-        let list = document.getElementById('imageList');
-        let item = document.createElement('li');
-        let child = document.createElement('a');
-        child.setAttribute('href', outputCanvas.toDataURL());
-        child.setAttribute('download', 'tierlist.png');
-        child.innerText = `TierList no ${list.children.length + 1}`;
-        item.appendChild(child);
-
-        list.appendChild(item);
+        if (previewWindow) {
+            previewWindow.location.href = outputCanvas.toDataURL();
+        }
     });
 }
