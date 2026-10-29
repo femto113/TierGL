@@ -1,1 +1,38 @@
 .tlm-pointer { cursor: pointer; }
+
+.tlm-item {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.tlm-item img {
+    display: block;
+}
+
+.tlm-caption {
+    max-width: 100%;
+    padding: 2px 4px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 11px;
+    line-height: 1.2;
+    text-align: center;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.tlm-score {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    padding: 1px 5px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 3px;
+    line-height: 1.4;
+}

@@ -30,7 +30,7 @@ function toArray(array_like) {
     return Array.prototype.slice.call(array_like);
 }
 
-function loadImageAndAddToDOM(file, stretch, cb) {
+function loadImageAndAddToDOM(file, stretch, cb, caption, score) {
     const reader = new FileReader();
     reader.onload = (e) => {
         let img = document.createElement('img');
@@ -38,17 +38,36 @@ function loadImageAndAddToDOM(file, stretch, cb) {
         img.height = 128;
         if (stretch)
             img.width = 128;
-        img.setAttribute('id', stringToHash(img.src));
-        img.setAttribute('draggable', 'true');
+        img.setAttribute('draggable', 'false');
 
-        img.addEventListener('click', (ev) => {
-            ev.target.parentElement.removeChild(ev.target);
+        let wrapper = document.createElement('span');
+        wrapper.classList.add('tlm-item');
+        wrapper.setAttribute('id', stringToHash(img.src));
+        wrapper.setAttribute('draggable', 'true');
+        wrapper.appendChild(img);
+
+        if (typeof score === 'number' && !Number.isNaN(score)) {
+            let badge = document.createElement('div');
+            badge.classList.add('tlm-score');
+            badge.textContent = score;
+            wrapper.appendChild(badge);
+        }
+
+        if (caption) {
+            let label = document.createElement('div');
+            label.classList.add('tlm-caption');
+            label.textContent = caption;
+            wrapper.appendChild(label);
+        }
+
+        wrapper.addEventListener('click', () => {
+            wrapper.parentElement.removeChild(wrapper);
         });
-        img.addEventListener('dragstart', (ev) => {
-            ev.dataTransfer.setData('text/plain', ev.target.id);
+        wrapper.addEventListener('dragstart', (ev) => {
+            ev.dataTransfer.setData('text/plain', wrapper.id);
         });
 
-        cb(img);
+        cb(wrapper);
     };
     reader.readAsDataURL(file);
 }

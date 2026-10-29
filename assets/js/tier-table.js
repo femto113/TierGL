@@ -4,9 +4,7 @@ const tiers = [
     'B',
     'C',
     'D',
-    'E',
     'F',
-    'G',
 ];
 
 const spacing = () => {
@@ -172,8 +170,7 @@ function generateTable(identifier, count = -1) {
             } else {
                 const id = ev.dataTransfer.getData('text');
                 const el = document.getElementById(id);
-                const drop_zone = ev.target;
-                drop_zone.appendChild(el);
+                content.appendChild(el);
             }
         }, false);
 

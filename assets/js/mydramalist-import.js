@@ -84,11 +84,12 @@ function addEntryToBoard(entry) {
         })
         .then((blob) => new Promise((resolve) => {
             loadImageAndAddToDOM(blob, false, (el) => {
-                el.alt = entry.title;
-                el.title = Number.isNaN(entry.score) ? entry.title : `${entry.title} (${entry.score})`;
+                const img = el.querySelector('img');
+                img.alt = entry.title;
+                img.title = Number.isNaN(entry.score) ? entry.title : `${entry.title} (${entry.score})`;
                 content.appendChild(el);
                 resolve();
-            });
+            }, entry.title, entry.score);
         }));
 }
 
