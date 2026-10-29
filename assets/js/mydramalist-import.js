@@ -1,4 +1,8 @@
-const MDL_CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+// API Gateway HTTP API in front of the Lambda in lambda/mdl-proxy/ — fetches
+// MyDramaList server-side (Python's urllib, not Node's fetch/https, since
+// Node's TLS client gets hit with Cloudflare's JS challenge on this site)
+// and adds the CORS header the browser needs.
+const MDL_PROXY_ENDPOINT = 'https://c6u6x63iif.execute-api.us-east-1.amazonaws.com';
 
 function normalizeMyDramaListUrl(rawUrl) {
     let url = (rawUrl || '').trim();
@@ -24,10 +28,11 @@ function tierIndexForScore(score, numTiers) {
 }
 
 async function fetchMyDramaListHtml(url) {
-    const proxied = MDL_CORS_PROXY + encodeURIComponent(url);
+    const proxied = `${MDL_PROXY_ENDPOINT}?url=${encodeURIComponent(url)}`;
     const response = await fetch(proxied);
     if (!response.ok) {
-        throw new Error(`Couldn't reach MyDramaList (HTTP ${response.status}). Try again in a moment.`);
+        const message = await response.text().catch(() => '');
+        throw new Error(message || `Couldn't reach MyDramaList (HTTP ${response.status}). Try again in a moment.`);
     }
     return response.text();
 }
