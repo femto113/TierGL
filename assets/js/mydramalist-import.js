@@ -18,13 +18,29 @@ function normalizeMyDramaListUrl(rawUrl) {
     return url;
 }
 
-function tierIndexForScore(score, numTiers) {
+// S gets the 2 highest unique score values in the list, A the next 2, and so
+// on — so tiers reflect the user's own rating spread rather than a fixed
+// 0-10 scale (S should be rare, not "everything you rated 9+").
+const UNIQUE_SCORES_PER_TIER = 2;
+
+function buildScoreTierMap(scores, numTiers) {
+    const uniqueDescending = [...new Set(scores.filter((score) => !Number.isNaN(score)))]
+        .sort((a, b) => b - a);
+
+    const map = new Map();
+    uniqueDescending.forEach((score, idx) => {
+        const tierIdx = Math.min(numTiers - 1, Math.floor(idx / UNIQUE_SCORES_PER_TIER));
+        map.set(score, tierIdx);
+    });
+    return map;
+}
+
+function tierIndexForScore(score, numTiers, scoreTierMap) {
     if (Number.isNaN(score)) {
         return numTiers - 1;
     }
-    const clamped = Math.min(10, Math.max(0, score));
-    const idx = Math.floor(((10 - clamped) / 10) * numTiers);
-    return Math.min(numTiers - 1, Math.max(0, idx));
+    const tierIdx = scoreTierMap.get(score);
+    return tierIdx === undefined ? numTiers - 1 : tierIdx;
 }
 
 async function fetchMyDramaListHtml(url) {
@@ -70,9 +86,9 @@ function clearAllTierContent() {
     });
 }
 
-function addEntryToBoard(entry) {
+function addEntryToBoard(entry, scoreTierMap) {
     const rows = document.querySelectorAll('#tableBody tr');
-    const tierIdx = tierIndexForScore(entry.score, rows.length);
+    const tierIdx = tierIndexForScore(entry.score, rows.length, scoreTierMap);
     const content = rows[tierIdx].children[1];
 
     return fetch(entry.poster)
@@ -131,9 +147,12 @@ async function importFromMyDramaList() {
         clearAllTierContent();
         setMdlImportStatus(`Loading ${entries.length} posters…`, false);
 
+        const numTiers = document.querySelectorAll('#tableBody tr').length;
+        const scoreTierMap = buildScoreTierMap(entries.map((entry) => entry.score), numTiers);
+
         let loaded = 0;
         let failed = 0;
-        await Promise.all(entries.map((entry) => addEntryToBoard(entry)
+        await Promise.all(entries.map((entry) => addEntryToBoard(entry, scoreTierMap)
             .then(() => { loaded += 1; })
             .catch(() => { failed += 1; })));
 
