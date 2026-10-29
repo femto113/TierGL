@@ -35,5 +35,6 @@ function export2image(evt) {
         item.appendChild(child);
 
         list.appendChild(item);
+        document.getElementById('imageListHint').hidden = false;
     });
 }
