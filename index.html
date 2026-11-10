@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html lang="en">
     <head>
-        <title>TierListMaker</title>
+        <title>ThaiGL Tier List</title>
         <meta charset="utf-8">
         <meta name="author" content="Alexandre SuperFola Plateau">
-        <meta name="description" content="Tier List maker">
-        <meta name="keywords" content="tier list, online, ranking">
+        <meta name="description" content="Make a tier list of ThaiGL dramas from your MyDramaList ratings">
+        <meta name="keywords" content="tier list, online, ranking, thaigl, mydramalist, thai drama, bl">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -21,13 +21,14 @@
         <script src="./assets/js/export2image.js" defer></script>
         <script src="./assets/js/saveModal.js" defer></script>
         <script src="./assets/js/tier-table.js" defer></script>
+        <script src="./assets/js/mydramalist-import.js" defer></script>
         <script src="./assets/js/main.js" defer></script>
         <script src="./assets/js/dark-mode.js" defer></script>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">TierListMaker</a>
+                <a class="navbar-brand" href="#">ThaiGL Tier List</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -43,7 +44,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="https://github.com/SuperFola/TierListMaker">
+                            <a class="nav-link" href="https://github.com/femto113/TierGL">
                                 Source code
                                 &nbsp;
                                 <span class="icon">
@@ -81,6 +82,15 @@
                     </table>
                 </div>
                 <div class="w-max-25 p-2">
+                    <div class="mb-3">
+                        <label for="mdlUrlInput" class="form-label">Import from MyDramaList</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="mdlUrlInput" placeholder="https://mydramalist.com/dramalist/123456/completed">
+                            <button type="button" class="btn btn-primary" id="btn-mdl-import">Import</button>
+                        </div>
+                        <div class="form-text" id="mdlImportStatus"></div>
+                    </div>
+                    <hr>
                     Number of rows
                     <select class="form-select" aria-label="Row count" id="selectRowCount"></select>
                     <div id="tierNames" class="mt-3">

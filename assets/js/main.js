@@ -60,6 +60,14 @@ document.onreadystatechange = () => {
 
     document.getElementById('btn-export').addEventListener('click', export2image);
 
+    document.getElementById('btn-mdl-import').addEventListener('click', importFromMyDramaList);
+    document.getElementById('mdlUrlInput').addEventListener('keydown', (evt) => {
+        if (evt.key === 'Enter') {
+            evt.preventDefault();
+            importFromMyDramaList();
+        }
+    });
+
     new bootstrap.Modal(document.getElementById('addContentModal'));
     document.getElementById('addContentModalSaveBtn').addEventListener('click', saveModal);
 };
